@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="questionService" class="ru.otus.studenttestapp.service.QuestionServiceCSVImpl">
+        <constructor-arg name="csvSource" value="/questions.csv"/>
+        <constructor-arg name="questionParserService" ref="questionParserService"/>
+    </bean>
+
+    <bean id="askingService" class="ru.otus.studenttestapp.service.AskingServiceConsolReadonlyImpl">
+    </bean>
+
+    <bean id="questionParserService" class="ru.otus.studenttestapp.service.QuestionParserServiceCSVImpl">
+    </bean>
+
+</beans>
