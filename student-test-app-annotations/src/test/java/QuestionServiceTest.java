@@ -1,6 +1,7 @@
 import org.junit.Test;
 import ru.otus.studenttestappannotations.domain.Answer;
 import ru.otus.studenttestappannotations.domain.Question;
+import ru.otus.studenttestappannotations.service.LineParserServiceCSVImpl;
 import ru.otus.studenttestappannotations.service.QuestionParserServiceCSVImpl;
 import ru.otus.studenttestappannotations.service.QuestionServiceCSVImpl;
 
@@ -13,7 +14,7 @@ public class QuestionServiceTest {
 
     @Test
     public void parseQuestions() {
-        QuestionServiceCSVImpl service = new QuestionServiceCSVImpl("/questions.csv", new QuestionParserServiceCSVImpl());
+        QuestionServiceCSVImpl service = new QuestionServiceCSVImpl("/questions.csv", new QuestionParserServiceCSVImpl(new LineParserServiceCSVImpl()));
         List<Question> questions = service.questions();
         assertTrue(questions.size() == 5);
         Question question = questions.get(0);
@@ -27,7 +28,7 @@ public class QuestionServiceTest {
 
     @Test
     public void parseOneQuestion() {
-        QuestionServiceCSVImpl service = new QuestionServiceCSVImpl("", new QuestionParserServiceCSVImpl());
+        QuestionServiceCSVImpl service = new QuestionServiceCSVImpl("", new QuestionParserServiceCSVImpl(new LineParserServiceCSVImpl()));
         List<Question> questions = service.questions();
         assertTrue(questions.size() == 0);
     }

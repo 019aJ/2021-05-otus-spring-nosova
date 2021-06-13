@@ -19,10 +19,13 @@ import java.util.Scanner;
 @PropertySource("classpath:application.properties")
 public class RightAnswerServiceImpl implements RightAnswerService {
 
-    private final  Map<String, Answer> rightAnswers = new HashMap<>();
+    private Map<String, Answer> rightAnswers;
+    private String csvSource;
+    private RightAnswersParserService rightAnswersParserService;
 
     public RightAnswerServiceImpl(@Value("${answer.path}") String csvSource, RightAnswersParserService rightAnswersParserService) {
-        parseQuestions(csvSource, rightAnswersParserService);
+        this.csvSource = csvSource;
+        this.rightAnswersParserService = rightAnswersParserService;
     }
 
     private void parseQuestions(String csvSource, RightAnswersParserService rightAnswersParserService) {
@@ -41,6 +44,10 @@ public class RightAnswerServiceImpl implements RightAnswerService {
 
     @Override
     public Map<String, Answer> rightAnswers() {
+        if (rightAnswers == null) {
+            rightAnswers = new HashMap<>();
+            parseQuestions(csvSource, rightAnswersParserService);
+        }
         return rightAnswers;
     }
 }

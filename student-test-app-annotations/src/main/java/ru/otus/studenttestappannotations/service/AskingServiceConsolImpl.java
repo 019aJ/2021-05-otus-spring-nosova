@@ -12,35 +12,40 @@ import java.util.stream.Collectors;
 @Service
 public class AskingServiceConsolImpl implements AskingService {
 
-    private final List<Question> questions = new ArrayList<>();
-    private final Map<String, Answer> rightAnswers = new HashMap<>();
-
+    private final QuestionService examQuestions;
+    private final QuestionService personalQuestions;
+    private final RightAnswerService answerService;
 
     public AskingServiceConsolImpl(QuestionService examQuestions, QuestionService personalQuestions, RightAnswerService answerService) {
-        questions.addAll(personalQuestions.questions());
-        questions.addAll(examQuestions.questions());
-        rightAnswers.putAll(answerService.rightAnswers());
+        this.examQuestions = examQuestions;
+        this.personalQuestions = personalQuestions;
+        this.answerService = answerService;
     }
 
     @Override
     public List<QuestionResult> ask() {
-        if (CollectionUtils.isEmpty(questions)) {
+        List<QuestionResult> questionResults = new ArrayList<>();
+        Map<String, Answer> rightAnswers = answerService.rightAnswers();
+        questionResults.addAll(personalQuestions.questions().stream().map(q->askQuestion(q, rightAnswers)).collect(Collectors.toList()));
+        questionResults.addAll(examQuestions.questions().stream().map(q->askQuestion(q, rightAnswers)).collect(Collectors.toList()));
+
+        if (CollectionUtils.isEmpty(questionResults)) {
             System.out.println("No question in this test. Take a rest=)");
             return new ArrayList<>();
         }
-        return questions.stream().map(this::askQuestion).collect(Collectors.toList());
+        return questionResults;
     }
 
-    protected QuestionResult askQuestion(Question q) {
+    private QuestionResult askQuestion(Question q, Map<String, Answer> rightAnswers ) {
         System.out.println(q.getQuestionText());
         List<Answer> answers = q.getAnswerVariants();
         if (!CollectionUtils.isEmpty(answers)) {
             answers.forEach(a -> System.out.println(" * " + a.getText()));
         }
-        return getAnswer(q);
+        return getAnswer(q, rightAnswers);
     }
 
-    protected QuestionResult getAnswer(Question q) {
+    private QuestionResult getAnswer(Question q, Map<String, Answer> rightAnswers ) {
         Scanner scanner = new Scanner(System.in);
         String answerText = scanner.nextLine();
         return new QuestionResult(q, rightAnswers.get(q.getId()), answerText);
