@@ -1,0 +1,13 @@
+question: questionFile
+answer: answerFile
+personalQuestion: pQuestionFile
+
+passingScore: 3
+
+spring:
+  messages:
+    basename: i18n/messages
+
+
+banner:
+   location=classpath:/banner.txt
