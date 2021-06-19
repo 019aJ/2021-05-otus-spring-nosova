@@ -1,13 +1,15 @@
-question: questionFile
-answer: answerFile
-personalQuestion: pQuestionFile
+question: questions.csv
+answer: answers.csv
+personalQuestion: personalquestions.csv
 
 passingScore: 3
+
+localeName: ru-RU
 
 spring:
   messages:
     basename: i18n/messages
-
+    fallback-to-system-locale: false
 
 banner:
-   location=classpath:/banner.txt
+  location=classpath:/banner.txt
