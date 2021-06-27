@@ -1,0 +1,22 @@
+spring:
+  shell:
+    interactive:
+      enabled: false
+
+    script:
+      spring:
+        shell:
+          script: false
+
+  messages:
+    basename: i18n/messages
+    fallback-to-system-locale: false
+
+question: questions.csv
+answer: answers.csv
+personalQuestion: personalquestions.csv
+
+passingScore: 1
+
+localeName: ru-RU
+
