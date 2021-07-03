@@ -10,18 +10,18 @@ import java.util.Scanner;
 
 @Service
 @NoArgsConstructor
-public class AskingServiceConsolImpl implements AskingService {
-    private static String askQuestion(String q) {
-        System.out.println(q + ": ");
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextLine();
-    }
-
+public class ReadInputConsolImpl implements ReadInputService {
     @Override
     public Map<String, String> ask(List<String> questions) {
         Map<String, String> questionResults = new HashMap<>();
-        questions.forEach(q -> questionResults.put(q, AskingServiceConsolImpl.askQuestion(q)));
+        questions.forEach(q -> questionResults.put(q, askQuestion(q)));
         return questionResults;
+    }
+
+    private String askQuestion(String q) {
+        System.out.println(q + ": ");
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
     }
 
 }

@@ -2,13 +2,11 @@ package ru.otus.libraryjdbcapp.service;
 
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import ru.otus.libraryjdbcapp.exceptions.InvalidInputException;
-import ru.otus.libraryjdbcapp.exceptions.LibraryAppException;
-import ru.otus.libraryjdbcapp.exceptions.NoSuchResultException;
-import ru.otus.libraryjdbcapp.exceptions.PkViolationException;
+import ru.otus.libraryjdbcapp.exceptions.*;
 import ru.otus.libraryjdbcapp.models.Author;
 import ru.otus.libraryjdbcapp.models.Book;
 import ru.otus.libraryjdbcapp.models.Genre;
@@ -45,6 +43,8 @@ public class BookServiceImpl implements BookService {
             return repository.insert(book);
         } catch (DuplicateKeyException e) {
             throw new PkViolationException("Книга с заданным id уже существует", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new FkViolationException("Неверный автор либо жанр", e);
         }
     }
 

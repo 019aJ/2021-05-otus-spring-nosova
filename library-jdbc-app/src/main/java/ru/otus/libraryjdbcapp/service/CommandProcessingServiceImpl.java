@@ -13,7 +13,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class CommandProcessingServiceImpl implements CommandProcessingService {
     private final LibraryManagingService libraryManagingService;
-    private final AskingService askingService;
+    private final ReadInputService askingService;
 
     @Override
     public void insert(String entityName) throws LibraryAppException {

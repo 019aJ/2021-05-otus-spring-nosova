@@ -50,10 +50,9 @@ public class AuthorTest {
     @Order(4)
     @DisplayName("Удаление автора по id")
     public void delete() {
-        authorRepository.deleteById(1L);
-        authorRepository.deleteById(2L);
-
         List<Author> result = authorRepository.all();
+        result.forEach(x -> authorRepository.deleteById(x.getId()));
+        result = authorRepository.all();
         assertEquals(result.size(), 0);
     }
 }
