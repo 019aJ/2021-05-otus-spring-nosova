@@ -6,6 +6,8 @@ import ru.otus.libraryjpaapp.models.Book;
 import ru.otus.libraryjpaapp.models.Comment;
 import ru.otus.libraryjpaapp.models.Genre;
 
+import java.util.List;
+
 public interface OutputService {
     void writeSearchResult(Long id, Book book);
 
@@ -15,4 +17,5 @@ public interface OutputService {
 
     void writeSearchCommentResult(Long id, Comment comment);
 
+    void writeCommentsForBookResult(String book, List<Comment> comments);
 }

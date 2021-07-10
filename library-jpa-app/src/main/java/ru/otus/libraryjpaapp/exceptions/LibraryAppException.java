@@ -1,6 +1,6 @@
 package ru.otus.libraryjpaapp.exceptions;
 
-public class LibraryAppException extends Throwable {
+public class LibraryAppException extends RuntimeException {
     public LibraryAppException(String text) {
         super(text);
     }

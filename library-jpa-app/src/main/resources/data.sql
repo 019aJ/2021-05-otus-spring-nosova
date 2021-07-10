@@ -13,3 +13,6 @@ insert into books (title, author_id, genre_id) values ('Murder on the Orient Exp
 insert into books (title, author_id, genre_id) values ('It', 4, 3);
 
 insert into comments (text, book_id) values ('Boring', 3);
+insert into comments (text, book_id) values ('So exiting', 3);
+insert into comments (text, book_id) values ('Best book ever', 3);
+insert into comments (text, book_id) values ('Who is the murder? Butler again?', 3);

@@ -18,4 +18,7 @@ public interface LibraryManagingService {
     void deleteById(String entityName, Long id) throws LibraryAppException;
 
     void findById(Long id, String entityName) throws LibraryAppException;
+
+    void comments(Long bookId) throws LibraryAppException;
+
 }

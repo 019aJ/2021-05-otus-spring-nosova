@@ -27,11 +27,8 @@ public class CommandProcessingServiceImpl implements CommandProcessingService {
     @Override
     public void update(String inputId, String entityName) throws LibraryAppException {
         Long id = getId(inputId);
-        List<String> fieldsForInput = libraryManagingService.updatingFields(entityName);
-        if (!fieldsForInput.isEmpty()) {
-            Map<String, String> fieldValues = askingService.ask(fieldsForInput);
-            libraryManagingService.update(entityName, id, fieldValues);
-        }
+        Map<String, String> fieldValues = askingService.ask(libraryManagingService.updatingFields(entityName));
+        libraryManagingService.update(entityName, id, fieldValues);
     }
 
     @Override
@@ -46,16 +43,20 @@ public class CommandProcessingServiceImpl implements CommandProcessingService {
         libraryManagingService.findById(bookId, entityName);
     }
 
+    @Override
+    public void comments(String id) throws LibraryAppException {
+        Long bookId = getId(id);
+        libraryManagingService.comments(bookId);
+    }
+
     private Long getId(String inputId) throws InvalidInputException {
         if (StringUtils.isEmpty(inputId)) {
             throw new InvalidInputException("Id должен быть задан");
         }
-        Long id;
         try {
-            id = Long.valueOf(inputId);
+            return Long.valueOf(inputId);
         } catch (NumberFormatException | NullPointerException e) {
             throw new InvalidInputException("Id должен быть числом");
         }
-        return id;
     }
 }

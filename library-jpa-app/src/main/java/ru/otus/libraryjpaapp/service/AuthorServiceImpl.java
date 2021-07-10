@@ -7,10 +7,7 @@ import ru.otus.libraryjpaapp.exceptions.NoSuchResultException;
 import ru.otus.libraryjpaapp.models.Author;
 import ru.otus.libraryjpaapp.repositories.AuthorRepository;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -37,19 +34,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public long insert(Map<String, String> authorFields) throws LibraryAppException {
-        return insert(new Author(authorFields.get("name"), authorFields.get("surname")));
-    }
-
-    @Override
     public void deleteById(long id) {
         repository.deleteById(id);
-    }
-
-    @Override
-    public List<String> fieldsForInput() {
-        List<String> fields = new ArrayList<>();
-        Collections.addAll(fields, "name", "surname");
-        return fields;
     }
 }

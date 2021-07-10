@@ -10,4 +10,7 @@ public interface CommandProcessingService {
     void delete(String id, String entityName) throws LibraryAppException;
 
     void read(String id, String entityName) throws LibraryAppException;
+
+    void comments(String id) throws LibraryAppException;
+
 }

@@ -9,7 +9,9 @@ spring:
           script: true
   datasource:
     url: jdbc:h2:mem:testdb
-    initialization-mode: never
+    initialization-mode: always
+    schema: classpath:schema.sql
+    data: classpath:data.sql
 
   jpa:
     generate-ddl: true

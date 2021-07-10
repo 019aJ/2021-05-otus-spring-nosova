@@ -55,4 +55,12 @@ public class LibraryManagingCommands {
         commandProcessingService.read(id, entityName);
     }
 
+    @ShellMethod(value = "comments for book command", key = {"gc", "rc"})
+    public void read(@ShellOption() String id) throws LibraryAppException {
+        if (StringUtils.isEmpty(id)) {
+            throw new InvalidInputException("Id для поиска не задан");
+        }
+        commandProcessingService.comments(id);
+    }
+
 }

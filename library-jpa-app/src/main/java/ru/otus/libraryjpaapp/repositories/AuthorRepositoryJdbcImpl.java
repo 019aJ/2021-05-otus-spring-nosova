@@ -7,7 +7,6 @@ import ru.otus.libraryjpaapp.models.Author;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +32,7 @@ public class AuthorRepositoryJdbcImpl implements AuthorRepository {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public Author insert(Author author) {
         if (author.getId() == null) {
             em.persist(author);
@@ -44,10 +43,8 @@ public class AuthorRepositoryJdbcImpl implements AuthorRepository {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public void deleteById(long id) {
-        Query query = em.createQuery("delete from Author a where a.id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
+        byId(id).ifPresent(em::remove);
     }
 }

@@ -7,7 +7,6 @@ import ru.otus.libraryjpaapp.models.Genre;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +32,7 @@ public class GenreRepositoryJdbcImpl implements GenreRepository {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public Genre insert(Genre genre) {
         if (genre.getId() == null) {
             em.persist(genre);
@@ -44,10 +43,8 @@ public class GenreRepositoryJdbcImpl implements GenreRepository {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public void deleteById(long id) {
-        Query query = em.createQuery("delete from Genre g where g.id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
+        byId(id).ifPresent(em::remove);
     }
 }

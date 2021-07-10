@@ -1,12 +1,15 @@
 package ru.otus.libraryjpaapp.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import ru.otus.libraryjpaapp.models.Author;
 import ru.otus.libraryjpaapp.models.Book;
 import ru.otus.libraryjpaapp.models.Comment;
 import ru.otus.libraryjpaapp.models.Genre;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -56,6 +59,16 @@ public class OutputServiceImpl implements OutputService {
         } else {
             log.info("Комментарий с id = " + comment.getId() + " из книги " + comment.getBook().getId() + ":");
             log.info(comment.getText());
+        }
+    }
+
+    @Override
+    public void writeCommentsForBookResult(String book, List<Comment> comments) {
+        if (CollectionUtils.isEmpty(comments)) {
+            log.info("Комментарии для книги " + book + " не найдены.");
+        } else {
+            log.info("Комментарий  для книги " + book + ":");
+            comments.forEach(comment -> log.info(comment.getText()));
         }
     }
 

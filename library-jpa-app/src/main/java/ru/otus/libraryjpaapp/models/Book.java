@@ -35,7 +35,7 @@ public class Book {
     private Genre genre;
 
     @OneToMany(cascade =
-            CascadeType.ALL, fetch = FetchType.EAGER)
+            CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", foreignKey = @ForeignKey(name = "fk_book"))
     @Fetch(FetchMode.SUBSELECT)
     @OnDelete(action = OnDeleteAction.CASCADE)

@@ -7,10 +7,7 @@ import ru.otus.libraryjpaapp.exceptions.NoSuchResultException;
 import ru.otus.libraryjpaapp.models.Genre;
 import ru.otus.libraryjpaapp.repositories.GenreRepository;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -37,19 +34,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public long insert(Map<String, String> genreFields) throws LibraryAppException {
-        return insert(new Genre(genreFields.get("name")));
-    }
-
-    @Override
     public void deleteById(long id) {
         repository.deleteById(id);
-    }
-
-    @Override
-    public List<String> fieldsForInput() {
-        List<String> fields = new ArrayList<>();
-        Collections.addAll(fields, "name");
-        return fields;
     }
 }

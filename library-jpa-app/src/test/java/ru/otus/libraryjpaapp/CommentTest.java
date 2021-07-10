@@ -13,6 +13,7 @@ import ru.otus.libraryjpaapp.repositories.CommentRepository;
 import ru.otus.libraryjpaapp.repositories.GenreRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -40,7 +41,7 @@ public class CommentTest {
         long genreId = genreRepository.insert(genre).getId();
         Book book = bookRepository.insert(new Book("BookName", author, genre));
         long bookId = book.getId();
-        Comment result = commentRepository.insert(new Comment("CommentName2", book));
+        Comment result = commentRepository.insert(Comment.builder().text("CommentName2").book(book).build());
         assertEquals(result.getText(), "CommentName2");
     }
 
@@ -54,6 +55,15 @@ public class CommentTest {
 
     @Test
     @Order(3)
+    @DisplayName("Выбор  комментариев для книги")
+    public void forBook() {
+        Optional<Book> book = bookRepository.byIdEagerly(1L);
+        List<Comment> result = book.orElse(new Book()).getComments();
+        assertEquals(result.size(), 1);
+    }
+
+    @Test
+    @Order(4)
     @DisplayName("Удаление комментария по id")
     public void delete() {
         commentRepository.deleteById(1L);
@@ -62,7 +72,7 @@ public class CommentTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     @DisplayName("Удаление комментария Cascade")
     public void deleteCascade() {
         Author author = new Author("Surname2", "AuthorName2");
@@ -71,7 +81,7 @@ public class CommentTest {
         long genreId = genreRepository.insert(genre).getId();
         Book book = bookRepository.insert(new Book("BookName2", author, genre));
         long bookId = book.getId();
-        Comment result = commentRepository.insert(new Comment("CommentName2", book));
+        Comment result = commentRepository.insert(Comment.builder().text("CommentName2").book(book).build());
         bookRepository.deleteById(result.getId());
     }
 
