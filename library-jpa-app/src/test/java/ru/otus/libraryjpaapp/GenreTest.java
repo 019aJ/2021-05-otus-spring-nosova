@@ -4,7 +4,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.otus.libraryjpaapp.models.Genre;
-import ru.otus.libraryjpaapp.repositories.GenreRepository;
+import ru.otus.libraryjpaapp.service.GenreService;
 
 import java.util.List;
 
@@ -15,13 +15,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GenreTest {
     @Autowired
-    private GenreRepository genreRepository;
+    private GenreService genreService;
 
     @Test
     @Order(1)
     @DisplayName("Вставка жанра")
     public void insertNoId() {
-        Genre result = genreRepository.insert(new Genre("GenreName2"));
+        Long id = genreService.insert(new Genre("GenreName2"));
+        Genre result = genreService.byId(id);
         assertEquals(result.getName(), "GenreName2");
     }
 
@@ -29,7 +30,7 @@ public class GenreTest {
     @Order(2)
     @DisplayName("Выбор всех жанров")
     public void all() {
-        List<Genre> result = genreRepository.all();
+        List<Genre> result = genreService.all();
         assertEquals(result.size(), 1);
     }
 
@@ -37,9 +38,9 @@ public class GenreTest {
     @Order(3)
     @DisplayName("Удаление жанра по id")
     public void delete() {
-        genreRepository.deleteById(1L);
-        genreRepository.deleteById(2L);
-        List<Genre> result = genreRepository.all();
+        genreService.deleteById(1L);
+        genreService.deleteById(2L);
+        List<Genre> result = genreService.all();
         assertEquals(result.size(), 0);
     }
 

@@ -20,20 +20,17 @@ public class CommentRepositoryJdbcImpl implements CommentRepository {
     private final EntityManager em;
 
     @Override
-    @Transactional(readOnly = true)
     public List<Comment> all() {
         TypedQuery<Comment> query = em.createQuery("select c from Comment c", Comment.class);
         return query.getResultList();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<Comment> byId(long id) {
         return Optional.ofNullable(em.find(Comment.class, id));
     }
 
     @Override
-    @Transactional
     public Comment insert(Comment comment) {
         Book book = em.getReference(Book.class, comment.getBook().getId());
         comment.setBook(book);

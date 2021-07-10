@@ -9,8 +9,6 @@ import ru.otus.libraryjpaapp.exceptions.NoSuchResultException;
 import ru.otus.libraryjpaapp.models.Author;
 import ru.otus.libraryjpaapp.models.Book;
 import ru.otus.libraryjpaapp.models.Genre;
-import ru.otus.libraryjpaapp.repositories.AuthorRepository;
-import ru.otus.libraryjpaapp.repositories.GenreRepository;
 
 import java.util.List;
 
@@ -23,9 +21,9 @@ public class BookServiceTest {
     @Autowired
     private BookService bookService;
     @Autowired
-    private AuthorRepository authorRepository;
+    private AuthorService authorService;
     @Autowired
-    private GenreRepository genreRepository;
+    private GenreService genreService;
 
     @Test
     @DisplayName("Поиск несуществующей книги")
@@ -48,10 +46,10 @@ public class BookServiceTest {
     @DisplayName("Вставка удаленного автора")
     public void insertSecondTime() {
         Author author = new Author(1L, "Surname", "AuthorName");
-        long authorId = authorRepository.insert(author).getId();
-        authorRepository.deleteById(authorId);
+        long authorId = authorService.insert(author);
+        authorService.deleteById(authorId);
         Genre genre = new Genre("GenreName");
-        long genreId = genreRepository.insert(genre).getId();
+        long genreId = genreService.insert(genre);
         Assertions.assertThrows(FkViolationException.class, () ->
                 bookService.insert(new Book("BookName", author, genre))
         );
@@ -65,10 +63,10 @@ public class BookServiceTest {
         List<Book> result = bookService.all();
         assertEquals(result.size(), 0);
 
-        authorRepository.deleteById(1L);
-        genreRepository.deleteById(1L);
-        assertEquals(authorRepository.all().size(), 0);
-        assertEquals(genreRepository.all().size(), 0);
+        authorService.deleteById(1L);
+        genreService.deleteById(1L);
+        assertEquals(authorService.all().size(), 0);
+        assertEquals(genreService.all().size(), 0);
     }
 
 }

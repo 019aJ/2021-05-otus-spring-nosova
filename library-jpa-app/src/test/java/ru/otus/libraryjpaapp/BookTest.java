@@ -6,12 +6,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.otus.libraryjpaapp.models.Author;
 import ru.otus.libraryjpaapp.models.Book;
 import ru.otus.libraryjpaapp.models.Genre;
-import ru.otus.libraryjpaapp.repositories.AuthorRepository;
-import ru.otus.libraryjpaapp.repositories.BookRepository;
-import ru.otus.libraryjpaapp.repositories.GenreRepository;
+import ru.otus.libraryjpaapp.service.AuthorService;
+import ru.otus.libraryjpaapp.service.BookService;
+import ru.otus.libraryjpaapp.service.GenreService;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -20,22 +19,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class BookTest {
     @Autowired
-    private AuthorRepository authorRepository;
+    private AuthorService authorService;
     @Autowired
-    private GenreRepository genreRepository;
+    private GenreService genreService;
     @Autowired
-    private BookRepository bookRepository;
+    private BookService bookRepository;
 
     @Test
     @DisplayName("Вставка книги")
     @Order(1)
     public void insert() {
         Author author = new Author("AuthorName", "Surname");
-        long authorId = authorRepository.insert(author).getId();
+        long authorId = authorService.insert(author);
         Genre genre = new Genre("GenreName");
-        long genreId = genreRepository.insert(genre).getId();
-        Book result = bookRepository.insert(new Book("BookName", author, genre));
-        long bookId = result.getId();
+        long genreId = genreService.insert(genre);
+        long bookId = bookRepository.insert(new Book("BookName", author, genre));
+        Book result = bookRepository.byId(bookId);
         assertEquals(result.getTitle(), "BookName");
         assertEquals(result.getAuthor().getId(), authorId);
         assertEquals(result.getAuthor().getName(), "AuthorName");
@@ -48,11 +47,11 @@ public class BookTest {
     @Order(2)
     public void insertAgain() {
         Author author = new Author("AuthorName2", "Surname2");
-        long authorId = authorRepository.insert(author).getId();
+        long authorId = authorService.insert(author);
         Genre genre = new Genre("GenreName2");
-        long genreId = genreRepository.insert(genre).getId();
-        Book result = bookRepository.insert(new Book("BookName2", author, genre));
-        long bookId = result.getId();
+        long genreId = genreService.insert(genre);
+        long bookId = bookRepository.insert(new Book("BookName2", author, genre));
+        Book result = bookRepository.byId(bookId);
         assertEquals(result.getTitle(), "BookName2");
         assertEquals(result.getAuthor().getId(), authorId);
         assertEquals(result.getAuthor().getName(), "AuthorName2");
@@ -72,8 +71,8 @@ public class BookTest {
     @Order(4)
     @DisplayName("Выбор по id")
     public void byId() {
-        Optional<Book> result = bookRepository.byId(1L);
-        assertEquals(result.get().getTitle(), "BookName");
+        Book result = bookRepository.byId(1L);
+        assertEquals(result.getTitle(), "BookName");
     }
 
     @Test
@@ -85,12 +84,12 @@ public class BookTest {
         List<Book> result = bookRepository.all();
         assertEquals(result.size(), 0);
 
-        authorRepository.deleteById(1L);
-        genreRepository.deleteById(1L);
-        authorRepository.deleteById(2L);
-        genreRepository.deleteById(2L);
-        assertEquals(authorRepository.all().size(), 0);
-        assertEquals(genreRepository.all().size(), 0);
+        authorService.deleteById(1L);
+        genreService.deleteById(1L);
+        authorService.deleteById(2L);
+        genreService.deleteById(2L);
+        assertEquals(authorService.all().size(), 0);
+        assertEquals(genreService.all().size(), 0);
 
     }
 }

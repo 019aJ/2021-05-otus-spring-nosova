@@ -7,41 +7,40 @@ import ru.otus.libraryjpaapp.models.Author;
 import ru.otus.libraryjpaapp.models.Book;
 import ru.otus.libraryjpaapp.models.Comment;
 import ru.otus.libraryjpaapp.models.Genre;
-import ru.otus.libraryjpaapp.repositories.AuthorRepository;
-import ru.otus.libraryjpaapp.repositories.BookRepository;
-import ru.otus.libraryjpaapp.repositories.CommentRepository;
-import ru.otus.libraryjpaapp.repositories.GenreRepository;
+import ru.otus.libraryjpaapp.service.AuthorService;
+import ru.otus.libraryjpaapp.service.BookService;
+import ru.otus.libraryjpaapp.service.CommentService;
+import ru.otus.libraryjpaapp.service.GenreService;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Тест для комментариев ")
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-
 public class CommentTest {
     @Autowired
-    private CommentRepository commentRepository;
+    private CommentService commentService;
     @Autowired
-    private AuthorRepository authorRepository;
+    private AuthorService authorService;
     @Autowired
-    private GenreRepository genreRepository;
+    private GenreService genreService;
     @Autowired
-    private BookRepository bookRepository;
+    private BookService bookService;
 
     @Test
     @Order(1)
     @DisplayName("Вставка комментария")
     public void insertNoId() {
         Author author = new Author("Surname", "AuthorName");
-        long authorId = authorRepository.insert(author).getId();
+        long authorId = authorService.insert(author);
         Genre genre = new Genre("GenreName");
-        long genreId = genreRepository.insert(genre).getId();
-        Book book = bookRepository.insert(new Book("BookName", author, genre));
-        long bookId = book.getId();
-        Comment result = commentRepository.insert(Comment.builder().text("CommentName2").book(book).build());
+        long genreId = genreService.insert(genre);
+        long bookId = bookService.insert(new Book("BookName", author, genre));
+        Book book = bookService.byId(bookId);
+        long id = commentService.insert(Comment.builder().text("CommentName2").book(book).build());
+        Comment result = commentService.byId(id);
         assertEquals(result.getText(), "CommentName2");
     }
 
@@ -49,7 +48,7 @@ public class CommentTest {
     @Order(2)
     @DisplayName("Выбор всех комментариев")
     public void all() {
-        List<Comment> result = commentRepository.all();
+        List<Comment> result = commentService.all();
         assertEquals(result.size(), 1);
     }
 
@@ -57,8 +56,8 @@ public class CommentTest {
     @Order(3)
     @DisplayName("Выбор  комментариев для книги")
     public void forBook() {
-        Optional<Book> book = bookRepository.byIdEagerly(1L);
-        List<Comment> result = book.orElse(new Book()).getComments();
+        Book book = bookService.byIdEagerly(1L);
+        List<Comment> result = book.getComments();
         assertEquals(result.size(), 1);
     }
 
@@ -66,8 +65,8 @@ public class CommentTest {
     @Order(4)
     @DisplayName("Удаление комментария по id")
     public void delete() {
-        commentRepository.deleteById(1L);
-        List<Comment> result = commentRepository.all();
+        commentService.deleteById(1L);
+        List<Comment> result = commentService.all();
         assertEquals(result.size(), 0);
     }
 
@@ -76,13 +75,13 @@ public class CommentTest {
     @DisplayName("Удаление комментария Cascade")
     public void deleteCascade() {
         Author author = new Author("Surname2", "AuthorName2");
-        long authorId = authorRepository.insert(author).getId();
+        long authorId = authorService.insert(author);
         Genre genre = new Genre("GenreName2");
-        long genreId = genreRepository.insert(genre).getId();
-        Book book = bookRepository.insert(new Book("BookName2", author, genre));
-        long bookId = book.getId();
-        Comment result = commentRepository.insert(Comment.builder().text("CommentName2").book(book).build());
-        bookRepository.deleteById(result.getId());
+        long genreId = genreService.insert(genre);
+        long bookId = bookService.insert(new Book("BookName2", author, genre));
+        Book book = bookService.byId(bookId);
+        long id = commentService.insert(Comment.builder().text("CommentName2").book(book).build());
+        bookService.deleteById(id);
     }
 
 }

@@ -2,6 +2,7 @@ package ru.otus.libraryjpaapp.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.libraryjpaapp.exceptions.LibraryAppException;
 import ru.otus.libraryjpaapp.exceptions.NoSuchResultException;
 import ru.otus.libraryjpaapp.models.Genre;
@@ -15,16 +16,19 @@ public class GenreServiceImpl implements GenreService {
     private final GenreRepository repository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Genre> all() {
         return repository.all();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Genre byId(long id) throws LibraryAppException {
         return repository.byId(id).orElseThrow(() -> new NoSuchResultException("Данные для id " + id + "не найдены"));
     }
 
     @Override
+    @Transactional
     public long insert(Genre genre) throws LibraryAppException {
         try {
             return repository.insert(genre).getId();
@@ -34,6 +38,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
+    @Transactional
     public void deleteById(long id) {
         repository.deleteById(id);
     }

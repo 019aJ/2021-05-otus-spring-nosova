@@ -19,7 +19,6 @@ public class GenreRepositoryJdbcImpl implements GenreRepository {
     private final EntityManager em;
 
     @Override
-    @Transactional(readOnly = true)
     public List<Genre> all() {
         TypedQuery<Genre> query = em.createQuery("select g from Genre g", Genre.class);
         return query.getResultList();
