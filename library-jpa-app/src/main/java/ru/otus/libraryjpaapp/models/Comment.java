@@ -22,7 +22,6 @@ public class Comment {
     @Column(name = "text")
     private String text;
 
-    @ManyToOne(cascade =
-            CascadeType.REMOVE)
+    @ManyToOne()
     private Book book;
 }
