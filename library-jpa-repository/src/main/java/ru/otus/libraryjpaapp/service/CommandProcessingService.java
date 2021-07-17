@@ -11,6 +11,6 @@ public interface CommandProcessingService {
 
     void read(String id, String entityName) throws LibraryAppException;
 
-    void comments(String id) throws LibraryAppException;
+    void comments(String bookId) throws LibraryAppException;
 
 }

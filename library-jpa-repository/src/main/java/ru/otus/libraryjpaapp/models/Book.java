@@ -3,6 +3,7 @@ package ru.otus.libraryjpaapp.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OnDelete;
@@ -39,6 +40,7 @@ public class Book {
     @JoinColumn(name = "book_id", foreignKey = @ForeignKey(name = "fk_book"))
     @Fetch(FetchMode.SUBSELECT)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @ToString.Exclude
     private List<Comment> comments;
 
     public Book(String title, Author author, Genre genre) {
@@ -46,4 +48,6 @@ public class Book {
         this.author = author;
         this.title = title;
     }
+
+
 }

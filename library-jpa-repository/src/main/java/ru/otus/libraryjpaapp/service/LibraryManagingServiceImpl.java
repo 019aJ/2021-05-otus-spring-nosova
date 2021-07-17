@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.libraryjpaapp.exceptions.InvalidInputException;
 import ru.otus.libraryjpaapp.exceptions.LibraryAppException;
 import ru.otus.libraryjpaapp.exceptions.NoSuchResultException;
@@ -135,6 +136,7 @@ public class LibraryManagingServiceImpl implements LibraryManagingService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public void findById(Long id, String entityName) throws LibraryAppException {
         entityName = formatName(entityName);
         switch (entityName) {
@@ -177,7 +179,8 @@ public class LibraryManagingServiceImpl implements LibraryManagingService {
     private void bookById(Long id) throws LibraryAppException {
         Book book = null;
         try {
-            book = bookService.byIdEagerly(id);
+            book = bookService.byId(id);
+            book.getComments().size();
         } catch (NoSuchResultException ex) {
             //Не нашли, но это ок
         }

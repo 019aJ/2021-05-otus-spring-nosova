@@ -32,20 +32,20 @@ public class CommandProcessingServiceImpl implements CommandProcessingService {
     }
 
     @Override
-    public void delete(String id, String entityName) throws LibraryAppException {
-        Long bookId = getId(id);
-        libraryManagingService.deleteById(entityName, bookId);
+    public void delete(String inputId, String entityName) throws LibraryAppException {
+        Long id = getId(inputId);
+        libraryManagingService.deleteById(entityName, id);
     }
 
     @Override
-    public void read(String id, String entityName) throws LibraryAppException {
-        Long bookId = getId(id);
-        libraryManagingService.findById(bookId, entityName);
+    public void read(String inputId, String entityName) throws LibraryAppException {
+        Long id = getId(inputId);
+        libraryManagingService.findById(id, entityName);
     }
 
     @Override
-    public void comments(String id) throws LibraryAppException {
-        Long bookId = getId(id);
+    public void comments(String inputBookId) throws LibraryAppException {
+        Long bookId = getId(inputBookId);
         libraryManagingService.comments(bookId);
     }
 
