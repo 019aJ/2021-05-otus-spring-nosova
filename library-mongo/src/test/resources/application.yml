@@ -1,0 +1,22 @@
+server:
+  port: 8081
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: test-library-mongo
+  shell:
+    interactive:
+      enabled: false
+
+    script:
+      spring:
+        shell:
+          script: false
+logging:
+  level:
+    root: INFO
+mongock:
+  runner-type: InitializingBean
+  change-logs-scan-package: ru.otus.librarymongo.changelogtest
