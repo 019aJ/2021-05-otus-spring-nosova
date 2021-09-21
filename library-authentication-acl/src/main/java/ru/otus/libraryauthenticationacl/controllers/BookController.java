@@ -3,7 +3,6 @@ package ru.otus.libraryauthenticationacl.controllers;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.libraryauthenticationacl.dto.BookDTO;
 import ru.otus.libraryauthenticationacl.dto.BookMapper;
@@ -39,14 +38,12 @@ public class BookController {
     }
 
     @PostMapping("/api/books")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BookDTO> createBook(@Valid @RequestBody BookDTO book) throws URISyntaxException {
         Book result = repository.save(bookMapper.toEntity(book));
         aclService.addPermissionsOnCreate(result);
         return ResponseEntity.created(new URI("/api/books/" + result.getId()))
                 .body(bookMapper.toDto(result));
     }
-
 
     @PutMapping("/api/books")
     public ResponseEntity<BookDTO> updateBook(@Valid @RequestBody BookDTO book) {

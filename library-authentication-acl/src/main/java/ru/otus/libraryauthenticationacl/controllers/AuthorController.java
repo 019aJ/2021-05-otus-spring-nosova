@@ -2,7 +2,6 @@ package ru.otus.libraryauthenticationacl.controllers;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.libraryauthenticationacl.models.Author;
 import ru.otus.libraryauthenticationacl.repositories.AuthorRepository;
@@ -19,13 +18,11 @@ public class AuthorController {
     private final AuthorRepository authorRepository;
 
     @GetMapping("/api/authors")
-    @PreAuthorize("hasRole('ADMIN')")
     public List<Author> authors() {
         return authorRepository.findAll();
     }
 
     @PostMapping("/api/authors")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Author> createAuthor(@Valid @RequestBody Author author) throws URISyntaxException {
         Author result = authorRepository.save(author);
         return ResponseEntity.created(new URI("/api/authors/" + result.getId()))

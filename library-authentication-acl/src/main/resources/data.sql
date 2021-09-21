@@ -17,9 +17,9 @@ insert into comments (text, book_id) values ('So exiting', 3);
 insert into comments (text, book_id) values ('Best book ever', 3);
 insert into comments (text, book_id) values ('Who is the murder? Butler again?', 3);
 
-insert into library_users (name, password, roles) values ('reader', 'reader', 'READER');
-insert into library_users (name, password, roles) values ('admin', 'admin', 'ADMIN');
-insert into library_users (name, password, roles) values ('editor', 'editor', 'ADMIN');
+insert into library_users (name, password, roles) values ('reader', '$2a$12$uux2IgDAql4IllVNMvUSj.bHWzGnebPsa6TwsgtVPjJseBc4pl.Py', 'READER');
+insert into library_users (name, password, roles) values ('admin', '$2a$12$vJXdQPVLtDrtwhlG/cs5pu3fF.f5/Ton2Nob4PfHtxLp6QshCMwqG', 'ADMIN');
+insert into library_users (name, password, roles) values ('editor', '$2a$12$u7.3iQ4fZ1XOck1fxTDUteDrdjegD2N33ms7W56Dq7K9ZzqGxbniO', 'ADMIN');
 
 ---
 --- ACL DATA

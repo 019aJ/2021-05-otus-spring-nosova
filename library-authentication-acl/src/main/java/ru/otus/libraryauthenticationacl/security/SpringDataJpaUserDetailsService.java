@@ -21,7 +21,7 @@ public class SpringDataJpaUserDetailsService implements UserDetailsService {
         LibraryUser user = repository.findByName(name);
         String[] roles = user.getRoles().split(";");
         for (int i = 0; i < roles.length; i++) roles[i] = "ROLE_" + roles[i];
-        return new User(user.getName(), LibraryUser.PASSWORD_ENCODER.encode(user.getPassword()),
+        return new User(user.getName(), user.getPassword(),
                 AuthorityUtils.createAuthorityList(roles));
     }
 

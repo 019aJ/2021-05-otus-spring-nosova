@@ -21,7 +21,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @PreAuthorize("hasPermission(#id, 'ru.otus.libraryauthenticationacl.models.Book', 'READ')")
     Optional<Book> findById(Long id);
 
-    @PreAuthorize("#book.id == null || hasPermission(#book, 'WRITE')")
+    @PreAuthorize("hasRole('ADMIN') && (#book.id == null || hasPermission(#book, 'WRITE'))")
     Book save(@Param("book") Book book);
 
     @Override
