@@ -1,0 +1,38 @@
+server:
+  port: 8081
+spring:
+  batch:
+    job:
+      enabled: false
+    shell:
+      interactive:
+        enabled: true
+
+      script:
+        spring:
+          shell:
+            script: false
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: libraryMongo
+  datasource:
+    url: jdbc:h2:mem:testdb
+    initialization-mode: always
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+
+    properties:
+      hibernate:
+        format_sql: true
+
+    show-sql: true
+logging:
+  level:
+    root: INFO
+mongock:
+  runner-type: InitializingBean
+  change-logs-scan-package: ru.otus.librarymigration.changelog
