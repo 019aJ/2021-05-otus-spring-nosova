@@ -1,0 +1,125 @@
+# Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
+version: '3.7'
+
+# Define services
+services:
+
+  # Eureka emergency-monitoring-system-eureka
+  eureka-server:
+    build:
+      context: emergency-monitoring-system-eureka 
+      dockerfile: Dockerfile
+    ports:
+      - "8011:8011" 
+    environment:
+      - JAVA_OPTS=
+         -DEUREKA_SERVER=http://eureka-server:8011/eureka
+    restart: always
+    networks: 
+      - backend
+      
+  # Coordinate transformation contamination-area-calculator
+  coord-transform-server:
+    build:
+      context: coord-transform
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083" 
+    restart: always
+    environment:
+      - JAVA_OPTS=
+         -DEUREKA_SERVER=http://eureka-server:8011/eureka
+    depends_on:
+      - eureka-server
+    networks:
+      - backend
+      
+  # Weather forecast contamination-area-calculator
+  weather-forecast-server:
+    build:
+      context: weather-forecast
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084" 
+    restart: always
+    environment:
+      - JAVA_OPTS=
+         -DEUREKA_SERVER=http://eureka-server:8011/eureka
+    depends_on:
+      - eureka-server
+    networks:
+      - backend
+      
+  # Calculation main server contamination-area-calculator
+  ca-calc-server:
+    build:
+      context: contamination-area-calculator 
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082" 
+    restart: always
+    environment:
+      - JAVA_OPTS=
+         -DEUREKA_SERVER=http://eureka-server:8011/eureka
+    depends_on:
+      - eureka-server
+      - coord-transform-server
+      - weather-forecast-server
+    networks:
+      - backend
+    
+    
+  # App backend service - emergency-monitoring-system
+  app-server:
+    build:
+      context: emergency-monitoring-system 
+      dockerfile: Dockerfile
+    environment:
+      - JAVA_OPTS=
+         -DEUREKA_SERVER=http://eureka-server:8011/eureka
+         #-DMONGO_SERVER=mongo-database
+         #-DMONGO_PORT=27018
+    depends_on:
+      #- mongo-database
+      - eureka-server
+    ports:
+      - "8081:8081" 
+    restart: always
+    networks:
+      - backend
+      - frontend
+      
+  # dashboard
+  ems-hystrix-dashboard:
+    build:
+      context: ems-hystrix-dashboard
+      dockerfile: Dockerfile
+    ports:
+      - "8788:8788" 
+    restart: always
+    environment:
+      - JAVA_OPTS=
+         -DEUREKA_SERVER=http://eureka-server:8011/eureka
+    depends_on:
+      - eureka-server
+      - app-server
+      - ca-calc-server
+    networks:
+      - backend
+
+  # Frontend Service 
+  app-client:
+    build:
+      context: emergency-monitoring-system-react 
+      dockerfile: Dockerfile
+    ports:
+      - "3001:80" 
+    restart: always
+    depends_on:
+      - app-server
+    networks:
+      - frontend  
+# Networks to be created to facilitate communication between containers
+networks:
+  backend:
+  frontend:    
