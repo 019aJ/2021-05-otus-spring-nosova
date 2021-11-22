@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @ChangeLog(order = "001")
 public class InitMongoDBDataChangeLog {
 
-    @ChangeSet(order = "000", id = "dropDB", author = "onosova", runAlways = true)
+    @ChangeSet(order = "000", id = "dropDB", author = "onosova", runAlways = false)
     public void dropDB(MongoDatabase database) {
         database.getCollection("ACL").drop();
         database.getCollection("Areas").drop();
@@ -34,7 +34,7 @@ public class InitMongoDBDataChangeLog {
         database.getCollection("Users").drop();
     }
 
-    @ChangeSet(order = "001", id = "initEmergencies", author = "onosova", runAlways = true)
+    @ChangeSet(order = "001", id = "initEmergencies", author = "onosova", runAlways = false)
     public void initEmergencies(ContaminationAreaRepository contaminationAreaRepository,
                                 EmergencyTypeRepository emergencyTypeRepository,
                                 MaterialRepository materialRepository,
@@ -58,7 +58,7 @@ public class InitMongoDBDataChangeLog {
 
         double[][] coords = new double[][]
                 {{143.02002, 54.149567}, {142.932129, 54.007769}, {142.866211, 53.839564}, {143.10791, 53.592505}, {143.305664, 53.265213}, {143.349609, 52.855864}, {143.327637, 52.562995}, {143.151855, 52.241256}, {143.305664, 51.822198}, {143.426514, 51.570241}, {143.492432, 51.382067}, {143.504791, 51.281676}, {143.556976, 51.166428}, {143.602295, 51.015483}, {143.800049, 50.362985}, {144.008789, 50.039502}, {144.135132, 49.763526}, {144.146118, 49.624946}, {144.261475, 49.51451}, {144.343872, 49.199654}, {144.420776, 49.030665}, {146.288452, 49.113434}, {147.370605, 54.863963}, {143.4375, 55.153766}, {142.866211, 54.406143}, {142.866211, 54.406143}, {143.02002, 54.149567}};
-        Polygon seeCoord = new Polygon(Arrays.asList(coords).stream().map(x -> new Point(x[0], x[1])).collect(Collectors.toList()));
+        Polygon seeCoord = new Polygon(Arrays.stream(coords).map(x -> new Point(x[0], x[1])).collect(Collectors.toList()));
         WaterArea area3 = new WaterArea(null, "Сахалинский шельф", "САХАЛИНСКИЙ ШЕЛЬФ", seeCoord);
         WaterArea area4 = new WaterArea(null, "Печорское море", "ПЕЧОРСКОЕ МОРЕ", null);
         area1 = waterAreaRepository.save(area1);
@@ -89,7 +89,7 @@ public class InitMongoDBDataChangeLog {
         emergency4 = emergencyMonitoringRepository.save(emergency4);
 
         coords = new double[][]{{140.549855, 47.76082}, {140.555863, 47.757849}, {140.555477, 47.751472}, {140.54625, 47.749798}, {140.540757, 47.754413}, {140.542946, 47.758945}, {140.549855, 47.76082}};
-        Polygon poly1 = new Polygon(Arrays.asList(coords).stream().map(x -> new Point(x[0], x[1])).collect(Collectors.toList()));
+        Polygon poly1 = new Polygon(Arrays.stream(coords).map(x -> new Point(x[0], x[1])).collect(Collectors.toList()));
 
         EmergencyMonitoring emergencyMonitoring = EmergencyMonitoring.builder()
                 .emergencyType(emergencyType1).material(oilLight).waterArea(area3)
@@ -100,7 +100,7 @@ public class InitMongoDBDataChangeLog {
 
         coords = new double[][]
                 {{143.661346, 51.412698}, {143.660874, 51.411828}, {143.65948, 51.411226}, {143.657269, 51.411199}, {143.655617, 51.411868}, {143.654523, 51.412604}, {143.654201, 51.413769}, {143.655252, 51.414639}, {143.656497, 51.415013}, {143.657227, 51.415134}, {143.658857, 51.41512}, {143.660316, 51.414531}, {143.661389, 51.413595}, {143.661346, 51.412698}};
-        poly1 = new Polygon(Arrays.asList(coords).stream().map(x -> new Point(x[0], x[1])).collect(Collectors.toList()));
+        poly1 = new Polygon(Arrays.stream(coords).map(x -> new Point(x[0], x[1])).collect(Collectors.toList()));
 
         EmergencyMonitoring emergencyMonitoring2 = EmergencyMonitoring.builder().emergencyType(emergencyType1).material(oilLight).waterArea(area3).createDate(monitoringDate)
                 .isActive(true)
@@ -110,13 +110,13 @@ public class InitMongoDBDataChangeLog {
         double xShift = -0.02;
         double yShift = -0.01;
         updateCoord(coords, xShift, yShift);
-        Polygon poly2 = new Polygon(Arrays.asList(coords).stream().map(x -> new Point(x[0], x[1])).collect(Collectors.toList()));
+        Polygon poly2 = new Polygon(Arrays.stream(coords).map(x -> new Point(x[0], x[1])).collect(Collectors.toList()));
         updateCoord(coords, xShift, yShift);
-        Polygon poly3 = new Polygon(Arrays.asList(coords).stream().map(x -> new Point(x[0], x[1])).collect(Collectors.toList()));
+        Polygon poly3 = new Polygon(Arrays.stream(coords).map(x -> new Point(x[0], x[1])).collect(Collectors.toList()));
         updateCoord(coords, xShift, yShift);
-        Polygon poly4 = new Polygon(Arrays.asList(coords).stream().map(x -> new Point(x[0], x[1])).collect(Collectors.toList()));
+        Polygon poly4 = new Polygon(Arrays.stream(coords).map(x -> new Point(x[0], x[1])).collect(Collectors.toList()));
         updateCoord(coords, xShift, yShift);
-        Polygon poly5 = new Polygon(Arrays.asList(coords).stream().map(x -> new Point(x[0], x[1])).collect(Collectors.toList()));
+        Polygon poly5 = new Polygon(Arrays.stream(coords).map(x -> new Point(x[0], x[1])).collect(Collectors.toList()));
 
         ContaminationArea contaminationArea1 = ContaminationArea.builder()
                 .createDate(monitoringDate)

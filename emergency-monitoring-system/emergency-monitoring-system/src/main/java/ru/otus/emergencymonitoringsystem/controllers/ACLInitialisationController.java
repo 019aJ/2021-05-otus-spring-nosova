@@ -18,6 +18,7 @@ import java.util.Map;
 @RestController
 @RequestMapping
 @AllArgsConstructor
+/**Создает для существующих EmergencyMonitoring записи в ACL(актуально только для записей, создающихся через InitMongoDBDataChangeLog, при работе с апи не требуется) */
 public class ACLInitialisationController {
     private final WaterAreaRepository waterAreaRepository;
     private final EMSUserRepository emsUserRepository;
@@ -44,9 +45,9 @@ public class ACLInitialisationController {
                     break;
             }
         });
-        waterAreaRepository.findAll().forEach(e -> {
-            monitoringAclService.addPermissionsForArea(e, Arrays.asList(map.get(e.getIdentifier())));
-        });
+        waterAreaRepository.findAll().forEach(e ->
+                monitoringAclService.addPermissionsForArea(e, Arrays.asList(map.get(e.getIdentifier())))
+        );
         emergencyMonitoringRepository.findAll().forEach(monitoringAclService::addPermissionsForMonitoring);
     }
 }

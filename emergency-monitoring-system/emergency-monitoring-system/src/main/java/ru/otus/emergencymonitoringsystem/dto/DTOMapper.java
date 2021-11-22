@@ -65,6 +65,21 @@ public class DTOMapper {
         return entities.stream().map(this::toDto).collect(Collectors.toList());
     }
 
+    public Polygon fromWkt(String wkt) {
+        if (Strings.isNullOrEmpty(wkt)) {
+            return null;
+        }
+        String normalizeSpace = StringUtils.normalizeSpace(wkt.trim());
+        String[] pointsStr = normalizeSpace.substring(9, normalizeSpace.length() - 2).split(",");
+        List<Point> points =
+                Arrays.stream(pointsStr).map(p -> {
+                    String[] coord = p.trim().split(" ");
+
+                    return new Point(Double.parseDouble(coord[0].trim()), Double.parseDouble(coord[1].trim()));
+                }).collect(Collectors.toList());
+        return new Polygon(points);
+    }
+
     private String toWktList(List<Polygon> polygon) {
         return String.join(";", polygon.stream().map(this::toWkt).collect(Collectors.toList()));
     }
@@ -79,22 +94,8 @@ public class DTOMapper {
         return sb.toString();
     }
 
-    private Polygon fromWkt(String wkt) {
-        if (Strings.isNullOrEmpty(wkt)) {
-            return null;
-        }
-        String[] pointsStr = StringUtils.normalizeSpace(wkt.trim()).substring(9, wkt.length() - 2).split(",");
-        List<Point> points =
-                Arrays.asList(pointsStr).stream().map(p -> {
-                    String[] coord = p.trim().split(" ");
-                    return new Point(Double.parseDouble(coord[0].trim()), Double.parseDouble(coord[1].trim()));
-                }).collect(Collectors.toList());
-        Polygon polygon = new Polygon(points);
-        return polygon;
-    }
-
     private List<Polygon> fromWktList(String wkt) {
         String[] pointsStr = wkt.split(";");
-        return Arrays.asList(pointsStr).stream().map(this::fromWkt).collect(Collectors.toList());
+        return Arrays.stream(pointsStr).map(this::fromWkt).collect(Collectors.toList());
     }
 }

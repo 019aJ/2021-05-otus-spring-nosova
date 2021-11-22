@@ -88,14 +88,8 @@ public class CalculationController {
                                  Date positionTime, ForecastResult forecast, int index) {
         Double[] shift = shiftValue(density, forecast, index);
         return new Polygon(area.getPoints().stream()
-                .map(p -> {
-                    Point point = new Point(p.getX() + shift[0], p.getY() + shift[1]);
-                    return point;
-                }).collect(Collectors.toList()));
-    }
-
-    private void checkGround(Polygon seaBounds, Polygon polygon) {
-
+                .map(p -> new Point(p.getX() + shift[0], p.getY() + shift[1]))
+                .collect(Collectors.toList()));
     }
 
     private Double[] shiftValue(Double density, ForecastResult forecast, int index) {
