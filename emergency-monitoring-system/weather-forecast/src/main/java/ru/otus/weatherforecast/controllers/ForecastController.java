@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping
 @AllArgsConstructor
-public class TransformController {
+public class ForecastController {
     private final StormglassService stormglassService;
 
     @PostMapping("/api/weather-forecast")

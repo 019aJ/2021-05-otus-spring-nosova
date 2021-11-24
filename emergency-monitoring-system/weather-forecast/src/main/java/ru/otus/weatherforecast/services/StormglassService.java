@@ -1,5 +1,6 @@
 package ru.otus.weatherforecast.services;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +14,14 @@ import ru.otus.weatherforecast.models.Forecast;
 
 @Service
 public class StormglassService {
+    String stormglassUrl;
+
+    public StormglassService(@Value("${stormglass-url:\"https://api.stormglass.io/v2/weather/}") String stormglassUrl) {
+        this.stormglassUrl = stormglassUrl;
+        if (!this.stormglassUrl.endsWith("/")) {
+            this.stormglassUrl += "/";
+        }
+    }
 
     @Cacheable(value = "forecasts", key = "#calculationInputData.lat+#calculationInputData.lon+#currentDate")
     public Forecast askStormglass(CalculationInputData calculationInputData, String currentDate) {
@@ -23,7 +32,7 @@ public class StormglassService {
 
         String lat = calculationInputData.getLat().toString();
         String lng = calculationInputData.getLon().toString();
-        ResponseEntity<Forecast> result = rest.exchange("https://api.stormglass.io/v2/weather/point?lat=" + lat + "&lng=" + lng + "&params=airTemperature,windSpeed,windDirection,waterTemperature", HttpMethod.GET, entity, Forecast.class);
+        ResponseEntity<Forecast> result = rest.exchange(stormglassUrl + "point?lat=" + lat + "&lng=" + lng + "&params=airTemperature,windSpeed,windDirection,waterTemperature", HttpMethod.GET, entity, Forecast.class);
         return result.getBody();
     }
 }

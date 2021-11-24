@@ -1,3 +1,5 @@
+stormglass-url: ${STORMGLASS_SERVER:https://api.stormglass.io/v2/weather/}
+
 server:
   port: 8084
 
