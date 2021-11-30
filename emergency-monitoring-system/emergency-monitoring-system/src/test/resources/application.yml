@@ -1,0 +1,34 @@
+server:
+  port: 8081
+spring:
+  data:
+    mongodb:
+      uri: ${MONGO_SERVER:mongodb+srv://admin:admin@cluster0.9xb7j.mongodb.net/emergencyMS?retryWrites=true&w=majority}
+  application:
+    name: emergency-monitoring-system
+logging:
+  level:
+    root: INFO
+mongock:
+  runner-type: InitializingBean
+  change-logs-scan-package: ru.otus.emergencymonitoringsystem.changelog1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  eureka:
+    client:
+      service-url:
+        defaultZone: ${EUREKA_SERVER:http://localhost:8011/eureka}
+      register-with-eureka: true
+      fetch-registry: true
+    server:
+      eviction-interval-timer-in-ms: 15000
+    instance:
+      leaseRenewalIntervalInSeconds: 30
+      leaseExpirationDurationInSeconds: 90
+      instance-id: ${spring.application.name}:${server.port}
+      prefer-ip-address: true
+
